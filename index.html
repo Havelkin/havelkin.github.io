@@ -929,18 +929,14 @@
     // ── GALLERY SLIDESHOW + LIGHTBOX ──
     const lightbox = document.getElementById('lightbox');
     const lbImg    = document.getElementById('lb-img');
-    const lbTitle  = document.getElementById('lb-title');
-    const lbDesc   = document.getElementById('lb-desc');
     const lbCounter= document.getElementById('lb-counter');
 
     let lbImages = [], lbIndex = 0;
 
-    function openLightbox(images, index, title, desc) {
+    function openLightbox(images, index) {
       if (!images.length) return;
       lbImages = images;
       lbIndex  = index;
-      lbTitle.textContent = title || '';
-      lbDesc.textContent  = desc  || '';
       updateLightbox();
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
@@ -1024,7 +1020,7 @@
 
       // Click → lightbox
       item.addEventListener('click', () => {
-        openLightbox(images, slideIndex, title, desc);
+        openLightbox(images, slideIndex);
       });
     });
   </script>
