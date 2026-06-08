@@ -311,15 +311,14 @@
     #gallery { border-bottom: 1px solid var(--border); padding-bottom: 2.5rem; }
 
     .masonry {
-      columns: 3;
-      column-gap: 0.8rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
     }
-    @media (max-width: 700px) { .masonry { columns: 2; } }
-    @media (max-width: 420px) { .masonry { columns: 1; } }
+    @media (max-width: 700px) { .masonry { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 420px) { .masonry { grid-template-columns: 1fr; } }
 
     .masonry-item {
-      break-inside: avoid;
-      margin-bottom: 0.8rem;
       position: relative;
       overflow: visible;
       background: var(--bg3);
@@ -330,23 +329,22 @@
     .masonry-img-wrap {
       position: relative;
       overflow: hidden;
+      height: 240px;
     }
 
     .masonry-item img {
       width: 100%;
+      height: 100%;
       display: block;
+      object-fit: cover;
       transition: transform 0.5s ease, filter 0.35s, opacity 0.4s;
       filter: brightness(0.88);
       position: absolute;
       top: 0; left: 0;
-      height: 100%;
-      object-fit: cover;
     }
-    .masonry-item img:first-child { position: relative; height: auto; }
     .masonry-item img.slide-active { opacity: 1; z-index: 2; }
     .masonry-item img.slide-hidden { opacity: 0; z-index: 1; }
-    .masonry-item:hover img { filter: brightness(1); }
-    .masonry-item:hover img:first-child { transform: scale(1.04); }
+    .masonry-item:hover img { filter: brightness(1); transform: scale(1.04); }
 
     .masonry-caption {
       padding: 0.5rem 0.6rem 0.4rem;
