@@ -383,6 +383,8 @@
       transition: background 0.3s;
     }
     .slide-dot.active { background: var(--accent); }
+    .slide-dot.video { background: rgba(255,255,255,0.35); border: 1px solid var(--accent); }
+    .slide-dot.video.active { background: var(--accent); }
 
     /* placeholder tile */
     .masonry-placeholder {
@@ -838,14 +840,44 @@
           </div>
         </div>
 
+        <!-- Chhaava — 2 images -->
+        <div class="masonry-item"
+          data-images='["obrazky/galerie/Chhaava_01.jpg","obrazky/galerie/Chhaava_02.jpg"]'
+          data-title="Chhaava"
+          data-desc="Modeling, Texturing, Lookdev, Muscles, Blendshapes">
+          <div class="masonry-img-wrap">
+            <img src="obrazky/galerie/Chhaava_01.jpg" alt="Chhaava" class="slide-active">
+            <img src="obrazky/galerie/Chhaava_02.jpg" alt="Chhaava 2" class="slide-hidden">
+            <div class="slide-dots"></div>
+          </div>
+          <div class="masonry-caption">
+            <div class="masonry-caption-title">CHHAAVA</div>
+            <div class="masonry-caption-desc">Modeling, Texturing, Lookdev, Muscles, Blendshapes</div>
+          </div>
+        </div>
+
         <!-- Placeholders for future groups -->
         <div class="masonry-item" data-images='[]'>
           <div class="masonry-placeholder"></div>
           <div class="masonry-caption"><div class="masonry-caption-title">&nbsp;</div><div class="masonry-caption-desc">&nbsp;</div></div>
         </div>
-        <div class="masonry-item" data-images='[]'>
-          <div class="masonry-placeholder"></div>
-          <div class="masonry-caption"><div class="masonry-caption-title">&nbsp;</div><div class="masonry-caption-desc">&nbsp;</div></div>
+
+        <!-- Babirusa — 4 images + video -->
+        <div class="masonry-item"
+          data-images='["obrazky/galerie/Babirusa_01.jpg","obrazky/galerie/Babirusa_02.jpg","obrazky/galerie/Babirusa_03.jpg","obrazky/galerie/Babirusa_04.jpg","vimeo:794058769"]'
+          data-title="Babirusa"
+          data-desc="3D Character">
+          <div class="masonry-img-wrap">
+            <img src="obrazky/galerie/Babirusa_01.jpg" alt="Babirusa" class="slide-active">
+            <img src="obrazky/galerie/Babirusa_02.jpg" alt="Babirusa 2" class="slide-hidden">
+            <img src="obrazky/galerie/Babirusa_03.jpg" alt="Babirusa 3" class="slide-hidden">
+            <img src="obrazky/galerie/Babirusa_04.jpg" alt="Babirusa 4" class="slide-hidden">
+            <div class="slide-dots"></div>
+          </div>
+          <div class="masonry-caption">
+            <div class="masonry-caption-title">BABIRUSA</div>
+            <div class="masonry-caption-desc">3D Character</div>
+          </div>
         </div>
         <div class="masonry-item" data-images='[]'>
           <div class="masonry-placeholder"></div>
@@ -943,13 +975,35 @@
     }
 
     function updateLightbox() {
-      lbImg.src = lbImages[lbIndex];
+      const current = lbImages[lbIndex];
       lbCounter.textContent = (lbIndex + 1) + ' / ' + lbImages.length;
+
+      // Remove any existing iframe
+      const existing = lightbox.querySelector('.lb-video');
+      if (existing) existing.remove();
+
+      if (current.startsWith('vimeo:')) {
+        const vimeoId = current.replace('vimeo:', '');
+        lbImg.style.display = 'none';
+        const iframe = document.createElement('iframe');
+        iframe.className = 'lb-video';
+        iframe.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1`;
+        iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+        iframe.allowFullscreen = true;
+        iframe.style.cssText = 'width:85vw;height:48vw;max-height:85vh;border:none;';
+        lightbox.insertBefore(iframe, lbCounter);
+      } else {
+        lbImg.style.display = '';
+        lbImg.src = current;
+      }
     }
 
     function closeLightbox() {
       lightbox.classList.remove('open');
       document.body.style.overflow = '';
+      const existing = lightbox.querySelector('.lb-video');
+      if (existing) existing.remove();
+      lbImg.style.display = '';
     }
 
     document.getElementById('lb-close').addEventListener('click', closeLightbox);
