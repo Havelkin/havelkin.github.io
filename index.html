@@ -1096,7 +1096,7 @@
 
         <!-- The Black Demon — 3 images + video -->
         <div class="masonry-item"
-          data-images='["obrazky/galerie/blackdemon_01.jpg","obrazky/galerie/blackdemon_02.jpg","obrazky/galerie/blackdemon_03.jpg","vimeo:1199761003"]'
+          data-images='["obrazky/galerie/blackdemon_01.jpg","obrazky/galerie/blackdemon_02.jpg","obrazky/galerie/blackdemon_03.jpg","vimeo:1199761003:vertical"]'
           data-title="The Black Demon"
           data-desc="Characters, Props — Modeling, Texturing, Lookdev">
           <div class="masonry-img-wrap">
@@ -1255,13 +1255,16 @@
 
         <!-- Watersprite — 2 images -->
         <div class="masonry-item"
-          data-images='["obrazky/galerie/watersprite_01.jpg","obrazky/galerie/watersprite_02.jpg"]'
+          data-images='["obrazky/galerie/watersprite_01.jpg","obrazky/galerie/watersprite_02.jpg","vimeo:1200042983"]'
           data-title="Watersprite"
           data-desc="CG Animals — Modeling, Texturing, Lookdev">
           <div class="masonry-img-wrap">
             <img src="obrazky/galerie/watersprite_01.jpg" alt="Watersprite" class="slide-active">
             <img src="obrazky/galerie/watersprite_02.jpg" alt="Watersprite 2" class="slide-hidden">
             <div class="slide-dots"></div>
+            <div class="video-badge">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+            </div>
           </div>
           <div class="masonry-caption">
             <div class="masonry-caption-title">WATERSPRITE</div>
@@ -1595,7 +1598,9 @@
       if (existing) existing.remove();
 
       if (current.startsWith('vimeo:')) {
-        const vimeoId = current.replace('vimeo:', '');
+        const parts = current.replace('vimeo:', '').split(':');
+        const vimeoId = parts[0];
+        const isVertical = parts[1] === 'vertical';
         lbImg.style.display = 'none';
 
         // Show thumbnail with play button first
@@ -1614,7 +1619,11 @@
           iframe.src = `https://player.vimeo.com/video/${vimeoId}?autoplay=1`;
           iframe.allow = 'autoplay; fullscreen; picture-in-picture';
           iframe.allowFullscreen = true;
-          iframe.style.cssText = 'width:85vw;height:48vw;max-height:82vh;border:none;';
+          if (isVertical) {
+            iframe.style.cssText = 'width:min(56vh, 85vw);height:min(100vh, 85vw*1.78);max-height:85vh;aspect-ratio:9/16;border:none;';
+          } else {
+            iframe.style.cssText = 'width:85vw;height:48vw;max-height:82vh;border:none;';
+          }
           lightbox.insertBefore(iframe, lbCounter);
         });
 
