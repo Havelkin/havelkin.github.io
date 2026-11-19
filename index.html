@@ -395,6 +395,38 @@
       margin-top: 0.1rem;
     }
 
+    /* ── MATURE CONTENT BLUR ── */
+    .mature-blur {
+      filter: blur(10px);
+      transition: filter 0.3s;
+    }
+    .mature-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      background: rgba(0,0,0,0.35);
+      cursor: pointer;
+      z-index: 3;
+    }
+    .mature-overlay-icon {
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+    .mature-overlay-text {
+      font-family: var(--font-b);
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-align: center;
+      padding: 0 0.5rem;
+    }
+
     .slide-dots {
       position: absolute;
       bottom: 6px;
@@ -954,6 +986,29 @@
           <div class="masonry-caption">
             <div class="masonry-caption-title">BAD BOY</div>
             <div class="masonry-caption-desc">Concept, Modeling, Texturing, Lookdev</div>
+          </div>
+        </div>
+
+        <!-- My Sad Dead — 5 images, mature content -->
+        <div class="masonry-item"
+          data-images='["obrazky/galerie/mysaddead_01.jpg","obrazky/galerie/mysaddead_02.jpg","obrazky/galerie/mysaddead_03.jpg","obrazky/galerie/mysaddead_04.jpg","obrazky/galerie/mysaddead_05.jpg"]'
+          data-title="My Sad Dead"
+          data-desc="Character Artist">
+          <div class="masonry-img-wrap">
+            <img src="obrazky/galerie/mysaddead_01.jpg" alt="My Sad Dead" class="slide-active">
+            <img src="obrazky/galerie/mysaddead_02.jpg" alt="My Sad Dead 2" class="slide-hidden mature-blur">
+            <img src="obrazky/galerie/mysaddead_03.jpg" alt="My Sad Dead 3" class="slide-hidden mature-blur">
+            <img src="obrazky/galerie/mysaddead_04.jpg" alt="My Sad Dead 4" class="slide-hidden mature-blur">
+            <img src="obrazky/galerie/mysaddead_05.jpg" alt="My Sad Dead 5" class="slide-hidden mature-blur">
+            <div class="mature-overlay" style="display:none;">
+              <div class="mature-overlay-icon">⚠️</div>
+              <div class="mature-overlay-text">Mature content<br>Click to view</div>
+            </div>
+            <div class="slide-dots"></div>
+          </div>
+          <div class="masonry-caption">
+            <div class="masonry-caption-title">MY SAD DEAD</div>
+            <div class="masonry-caption-desc">Character Artist — TV Series 2026</div>
           </div>
         </div>
 
@@ -1711,6 +1766,8 @@
       const title = item.dataset.title || '';
       const desc  = item.dataset.desc  || '';
       const imgs  = item.querySelectorAll('.masonry-img-wrap img');
+      const matureOverlay = item.querySelector('.mature-overlay');
+      const hasMature = item.querySelector('.mature-blur') !== null;
 
       // Build dots
       const dotsEl = item.querySelector('.slide-dots');
@@ -1736,6 +1793,15 @@
           });
         }
         slideIndex = i;
+        // Show mature overlay when blurred slide is active
+        if (matureOverlay) {
+          const currentImg = imgs[i];
+          if (currentImg && currentImg.classList.contains('mature-blur')) {
+            matureOverlay.style.display = 'flex';
+          } else {
+            matureOverlay.style.display = 'none';
+          }
+        }
       }
 
       item.addEventListener('mouseenter', () => {
@@ -1750,7 +1816,7 @@
         showSlide(0);
       });
 
-      // Click → lightbox
+      // Click → lightbox (always shows unblurred)
       item.addEventListener('click', () => {
         openLightbox(images, 0);
       });
